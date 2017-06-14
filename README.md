@@ -7,4 +7,7 @@ The program reads a dataset of profiles of cervical cancer patients (858 patient
 
 The program splits the input dataset into three subsets: training set 60%, validation set 20%, test set 20%. The data instances for each subset are chosen randomly by the program. The program then starts a loop for the optimization of the hyper-parameters: for each hyper-parameter value, it trains the neural network model on the training set, appies the trained model to the validation set, and saves its result (measured with the Matthews correlation coefficient (MCC)). At the end of the loop, the program selects the model who obtained the best MCC, and applies it to the held-out test test. That is the last test.
 
+Tu run the program on your Linux machine, install Torch and then type:
+`th cervical_ann_script_val.lua cervical_arranged_NORM.csv`
+
 For any question: davide.chicco(AT)gmail.com
