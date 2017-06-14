@@ -327,7 +327,7 @@ MOMENTUM_ALPHA = 0.5
 
 MOMENTUM = true
 LEARN_RATE = 0.01 -- default was 0.01
-ITERATIONS = 5000 -- default was 200 -- I'M ANALYZING THIS PARAMETER IN THIS ANALYSIS
+ITERATIONS = 1000 -- default was 200 -- I'M ANALYZING THIS PARAMETER IN THIS ANALYSIS
 local hidden_units = 50 -- default was 50
 
 print("\nOPTIM_PACKAGE  = ".. tostring(OPTIM_PACKAGE));
