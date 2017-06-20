@@ -81,12 +81,15 @@ function executeTest(testPerceptron, dataset_patient_profile)
     if atleastOneFalse==false then print("ATTENTION: all the predictions are TRUE") end
 
    require './metrics_ROC_AUC_computer.lua'
-   metrics_ROC_AUC_computer(predictionTestVect, truthVect)
+   local output_AUC_computer = metrics_ROC_AUC_computer(predictionTestVect, truthVect)
+   local auroc = output_AUC_computer[1]
+   local aupr = output_AUC_computer[2]
 
     local printValues = false
     local output_confusion_matrix = confusion_matrix(predictionTestVect, truthVect, THRESHOLD, printValues)
 
-    return {output_confusion_matrix[4], output_confusion_matrix[1], output_confusion_matrix[5]}; -- MCC, accuracy, f1_score
+    return {output_confusion_matrix[4], output_confusion_matrix[1], output_confusion_matrix[5], auroc, aupr}; 
+    -- MCC, accuracy, f1_score, AUROC, AUPR
 end
 
 
@@ -330,6 +333,11 @@ LEARN_RATE = 0.01 -- default was 0.01
 ITERATIONS = 200 -- default was 200 -- I'M ANALYZING THIS PARAMETER IN THIS ANALYSIS
 local hidden_units = 50 -- default was 50
 
+local mcc = "mcc"
+local aupr = "aupr"
+OPTIMIZE_SCORE = aupr
+
+
 print("\nOPTIM_PACKAGE  = ".. tostring(OPTIM_PACKAGE));
 print("XAVIER_INITIALIZATION = ".. tostring(XAVIER_INITIALIZATION));
 print("DROPOUT_FLAG = ".. tostring(DROPOUT_FLAG));
@@ -484,6 +492,9 @@ end
 -- OPTIMIZATION LOOPS  
 local MCC_vect = {}  
 local f1score_vect = {}  
+local auroc_vett = {}
+local aupr_vett = {}
+
 local hus_vect = {}
 local hl_vect = {}
 
@@ -583,8 +594,12 @@ for b=1,#hiddenLayerVect do
     
    print("\n\n### executeTest(perceptron, validation_patient_profile)")     
    local testOutput = executeTest(perceptron, validation_patient_profile)
+   
    MCC_vect[#MCC_vect+1] = testOutput[1]
    f1score_vect[#f1score_vect+1] = testOutput[3]
+   auroc_vett[#auroc_vett+1] = testOutput[4]
+   aupr_vett[#aupr_vett+1] = testOutput[5]
+   
    hus_vect[#hus_vect+1] = hidden_units
    hl_vect[#hl_vect+1] = hidden_layers
       
@@ -598,22 +613,44 @@ end
 
 local maxMCC = -1
 local maxMCCpos = -1
+
+local max_aupr = -1
+local max_aupr_pos = -1
+
 for k=1,#MCC_vect do
-      io.write("@ @ @ @ @ @ @ MCC_vect["..k.."] ="..round(MCC_vect[k],2))
-      io.write(" f1score_vect["..k.."] ="..round(f1score_vect[k],2))
-      io.write(" hidden units = "..hus_vect[k].." ")
-      io.write(" hidden layers = "..hl_vect[k].." ")      
-      io.write(" @ @ @ @ @ @ @\n")
+      io.write("@ @ ["..k.."] ")
+      io.write("\tAUPR = "..round(aupr_vett[k],2).."% ")
+      io.write("\tMCC = "..round(MCC_vect[k],2))
+      io.write("\tF1_score  = "..round(f1score_vect[k],2))
+      io.write("\tAUROC  = "..round(auroc_vett[k],2).."% ")
+      io.write("\thidden units = "..hus_vect[k].." ")
+      io.write("\thidden layers = "..hl_vect[k].." ")      
+      io.write(" @ @ \n")
       io.flush()
       
       if MCC_vect[k]>=maxMCC then 
 	  maxMCC = MCC_vect[k]
 	  maxMCCpos = k
       end
+      if aupr_vett[k]>=max_aupr then 
+	  max_aupr = aupr_vett[k]
+	  max_aupr_pos = k
+      end
 end
 
-local modelFileToLoad = tostring(modelFileVect[maxMCCpos])
-print("\nmodelFileVect["..maxMCCpos.."]\nmodelFileToLoad ="..modelFileToLoad)
+-- CHOOSING THE MODEL BY OPTIMZING THE MCC OR AUPR
+local modelFileToLoad = nil
+if OPTIMIZE_SCORE == mcc then
+
+  modelFileToLoad = tostring(modelFileVect[maxMCCpos])
+  print("\nmodelFileVect["..maxMCCpos.."]\nmodelFileToLoad ="..modelFileToLoad)
+  
+elseif OPTIMIZE_SCORE == aupr then
+
+  modelFileToLoad = tostring(modelFileVect[max_aupr_pos])
+  print("\nmodelFileVect["..max_aupr_pos.."]\nmodelFileToLoad ="..modelFileToLoad)
+  
+end
 
 local loadedModel = torch.load(modelFileToLoad)
 

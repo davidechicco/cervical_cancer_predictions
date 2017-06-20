@@ -138,7 +138,7 @@ function metrics_ROC_AUC_computer(completePredValueVector, truthVector)
 	printTime(timeNewAreaStart0, " the new area_roc metrics ROC_AUC_computer function");
 
 	
-	return area_roc;
+	return {area_roc, area_precision_recall};
 end
 
 
