@@ -50,14 +50,14 @@ test_set_first_index <- round(dim(prc_data_norm)[1]*80/100)+1 # NEW
 test_set_last_index <- dim(prc_data_norm)[1] # NEW
 
 cat("[Creating the subsets for the values]\n")
-prc_data_train <- prc_data_norm[training_set_first_index:training_set_last_index, ] # NEW
-prc_data_validation <- prc_data_norm[validation_set_first_index:validation_set_last_index, ] # NEW
-prc_data_test <- prc_data_norm[test_set_first_index:test_set_last_index, ] # NEW
+prc_data_train <- prc_data_norm[training_set_first_index:training_set_last_index, 1:(target_index-1)] # NEW
+prc_data_validation <- prc_data_norm[validation_set_first_index:validation_set_last_index, 1:(target_index-1)] # NEW
+prc_data_test <- prc_data_norm[test_set_first_index:test_set_last_index, 1:(target_index-1)] # NEW
 
 cat("[Creating the subsets for the labels \"1\"-\"0\"]\n")
-prc_data_train_labels <- prc_data_norm[training_set_first_index:training_set_last_index, target_index-1] # NEW
-prc_data_validation_labels <- prc_data_norm[validation_set_first_index:validation_set_last_index, target_index-1] # NEW
-prc_data_test_labels <- prc_data_norm[test_set_first_index:test_set_last_index, target_index-1]   # NEW
+prc_data_train_labels <- prc_data_norm[training_set_first_index:training_set_last_index, target_index] # NEW
+prc_data_validation_labels <- prc_data_norm[validation_set_first_index:validation_set_last_index, target_index] # NEW
+prc_data_test_labels <- prc_data_norm[test_set_first_index:test_set_last_index, target_index]   # NEW
 
 library(class)
 library(gmodels)
@@ -94,10 +94,13 @@ for(thisK in 1:maxK)
   prc_data_validation_pred_binary <- as.numeric (prc_data_validation_pred_binary)
   # prc_data_validation_pred_binary
   
-  fg <- prc_data_validation_pred[prc_data_validation$Biopsy==1]
-  bg <- prc_data_validation_pred[prc_data_validation$Biopsy==0]
+  fg <- prc_data_validation_pred[prc_data_validation_labels==1]
+  bg <- prc_data_validation_pred[prc_data_validation_labels==0]
   pr_curve <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+
+  # plot(pr_curve)
   print(pr_curve)
+  
   
   mcc_outcome <- mcc(prc_data_validation_labels_binary, prc_data_validation_pred_binary)
   cat("When k=",thisK,", the MCC value is ",mcc_outcome, "\t (worst possible: -1; best possible: +1)\n", sep="")
@@ -130,9 +133,10 @@ prc_data_test_pred_binary <- replace(prc_data_test_pred_binary_TEMP, prc_data_te
 prc_data_test_pred_binary <- as.numeric (prc_data_test_pred_binary)
 # prc_data_test_pred_binary
 
-fg_test <- prc_data_test_pred[prc_data_test$Biopsy==1]
-bg_test <- prc_data_test_pred[prc_data_test$Biopsy==0]
+fg_test <- prc_data_test_pred[prc_data_test_labels==1]
+bg_test <- prc_data_test_pred[prc_data_test_labels==0]
 pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = T)
+#plot(pr_curve_test)
 print(pr_curve_test)
 
 mcc_outcome <- mcc(prc_data_test_labels_binary, prc_data_test_pred_binary)

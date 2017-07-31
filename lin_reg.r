@@ -51,9 +51,10 @@ test_set_first_index <- round(dim(prc_data_norm)[1]*80/100)+1 # NEW
 test_set_last_index <- dim(prc_data_norm)[1] # NEW
 
 cat("[Creating the subsets for the values]\n")
-prc_data_train <- prc_data_norm[training_set_first_index:training_set_last_index, ] # NEW
-prc_data_validation <- prc_data_norm[validation_set_first_index:validation_set_last_index, ] # NEW
-prc_data_test <- prc_data_norm[test_set_first_index:test_set_last_index, ] # NEW
+prc_data_train <- prc_data_norm[training_set_first_index:training_set_last_index, 1:(target_index-1)] # NEW
+prc_data_validation <- prc_data_norm[validation_set_first_index:validation_set_last_index, 1:(target_index-1)] # NEW
+prc_data_test <- prc_data_norm[test_set_first_index:test_set_last_index, 1:(target_index-1)] # NEW
+
 
 cat("[Creating the subsets for the labels \"1\"-\"0\"]\n")
 prc_data_train_labels <- prc_data_norm[training_set_first_index:training_set_last_index, target_index] # NEW
@@ -150,7 +151,10 @@ prc_data_test_pred_binary[prc_data_test_pred_binary<tau]<-0
 fg_test <- prc_data_test_pred[prc_data_test$Biopsy==1]
 bg_test <- prc_data_test_pred[prc_data_test$Biopsy==0]
 pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = T)
+plot(pr_curve_test)
 print(pr_curve_test)
+
+
   
 
 mcc_outcome <- mcc(prc_data_test_labels_binary, prc_data_test_pred_binary)
