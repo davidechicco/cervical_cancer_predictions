@@ -55,9 +55,9 @@ prc_data_validation <- prc_data_norm[validation_set_first_index:validation_set_l
 prc_data_test <- prc_data_norm[test_set_first_index:test_set_last_index, ] # NEW
 
 cat("[Creating the subsets for the labels \"1\"-\"0\"]\n")
-prc_data_train_labels <- prc_data_norm[training_set_first_index:training_set_last_index, target_index] # NEW
-prc_data_validation_labels <- prc_data_norm[validation_set_first_index:validation_set_last_index, target_index] # NEW
-prc_data_test_labels <- prc_data_norm[test_set_first_index:test_set_last_index, target_index]   # NEW
+prc_data_train_labels <- prc_data_norm[training_set_first_index:training_set_last_index, target_index-1] # NEW
+prc_data_validation_labels <- prc_data_norm[validation_set_first_index:validation_set_last_index, target_index-1] # NEW
+prc_data_test_labels <- prc_data_norm[test_set_first_index:test_set_last_index, target_index-1]   # NEW
 
 library(class)
 library(gmodels)
