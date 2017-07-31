@@ -108,7 +108,7 @@ for(thisC in c_array)
   
   fg <- prc_data_validation_pred[prc_data_validation$Biopsy==1]
   bg <- prc_data_validation_pred[prc_data_validation$Biopsy==0]
-  pr_curve <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+  pr_curve <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = F)
   print(pr_curve)
   
   mcc_outcome <- mcc(prc_data_validation_labels_binary, prc_data_validation_pred_binary)
@@ -150,7 +150,7 @@ prc_data_test_pred_binary[prc_data_test_pred_binary<tau]<-0
 
 fg_test <- prc_data_test_pred[prc_data_test$Biopsy==1]
 bg_test <- prc_data_test_pred[prc_data_test$Biopsy==0]
-pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = T)
+pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = F)
 plot(pr_curve_test)
 
 print(pr_curve_test)

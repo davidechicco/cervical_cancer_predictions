@@ -62,7 +62,7 @@ prc_data_test_labels <- prc_data_norm[test_set_first_index:test_set_last_index, 
 library(class)
 library(gmodels)
 
-# The k value must be lower than the size of the training set
+# # The k value must be lower than the size of the trainingset
 maxK <- 30 #NEW
 
 mcc_array <- character(length(maxK))
@@ -96,7 +96,7 @@ for(thisK in 1:maxK)
   
   fg <- prc_data_validation_pred[prc_data_validation_labels==1]
   bg <- prc_data_validation_pred[prc_data_validation_labels==0]
-  pr_curve <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = T)
+  pr_curve <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = F)
 
   # plot(pr_curve)
   print(pr_curve)
@@ -135,7 +135,7 @@ prc_data_test_pred_binary <- as.numeric (prc_data_test_pred_binary)
 
 fg_test <- prc_data_test_pred[prc_data_test_labels==1]
 bg_test <- prc_data_test_pred[prc_data_test_labels==0]
-pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = T)
+pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = F)
 #plot(pr_curve_test)
 print(pr_curve_test)
 
