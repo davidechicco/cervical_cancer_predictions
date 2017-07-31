@@ -1,6 +1,6 @@
 
-# Computational prediction of patients diagnosis and feature selection applied to a mesothelioma dataset
-Computational prediction of patients diagnosis and feature selection applied to a mesothelioma dataset
+# Computational prediction of patients diagnosis applied to a cervical cancer dataset
+Computational prediction of patients diagnosis applied to a cervical cancer dataset
 
 ## Installation
 To run the scripts, you need to have installed:
@@ -75,7 +75,7 @@ Clone this repository:<br>
 `git clone https://github.com/davidechicco/cervical_cancer_predictions.git`<br>
 
 Move to the project main directory, and download the mesothelioma dataset file:<br>
-`cd /cervical_cancer_predictionss/` <br>
+`cd /cervical_cancer_predictions/` <br>
 
 ### Dependency installation for Mac OS
 <img src="https://www.technobuffalo.com/wp-content/uploads/2015/06/Mac-OS-logo.jpg" width="150" align="right">
