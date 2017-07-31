@@ -124,6 +124,15 @@ To run the script with the k-fold cross validation, type:
 
 `th cervical_ann_script_val_kfold.lua cervical_arranged_NORM.csv`
 
+Other methods (linear regression, k-nearest neighbors, support vector machine):
+
+
+`Rscript lin_reg.r cervical_arranged_NORM.csv`
+
+`Rscript knn.r cervical_arranged_NORM.csv`
+
+`Rscript svm.r cervical_arranged_NORM.csv`
+
 
 ## Contacts
 This sofware was developed by [Davide Chicco](http://www.DavideChicco.it) at [the Princess Margaret Cancer Centre](http://www.uhn.ca/PrincessMargaret/Research/) (Toronto, Ontario, Canada).
