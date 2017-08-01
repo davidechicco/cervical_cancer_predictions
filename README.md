@@ -46,9 +46,6 @@ Move to the project main directory, and download the mesothelioma dataset file:<
 <img src="http://brettspence.com/wp-content/uploads/2014/11/centos-7-logo-580x118.jpg" width="100" align="right">
 Here are the instructions to install all the programs and libraries needed by our scripts on a Linux CentOS computer, from a shell terminal. We tested these instructions on a Dell Latitude 3540 laptop, running Linux Ubuntu 16.10 operating system, and having a 64-bit kernel, in February 2017. If you are using another operating system version, some instructions might be slightly different.
 
-(Optional) First of all, update:<br>
-`sudo yum -y update`
-
 Install R, its dependencies, and is rgl, clusterSim, randomForest packages:<br>
 `sudo yum -y install R` <br>
 `sudo yum -y install mesa-libGL` <br>
@@ -80,9 +77,6 @@ Move to the project main directory, and download the mesothelioma dataset file:<
 ### Dependency installation for Mac OS
 <img src="https://www.technobuffalo.com/wp-content/uploads/2015/06/Mac-OS-logo.jpg" width="150" align="right">
 Here are the instructions to install all the programs and libraries needed by our scripts on a Mac computer, from a shell terminal. We tested these instructions on an Apple computer running a Mac OS macOS 10.12.2 Sierra operating system, in March 2017. If you are using another operating system version, some instructions might be slightly different.
-
-(Optional) First of all, update:<br>
-`sudo softwareupdate -iva`<br>
 
 Manually download and install XQuartz from https://www.xquartz.org <br>
 
