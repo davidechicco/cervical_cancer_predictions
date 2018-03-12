@@ -119,7 +119,7 @@ cat("[Optimization end]\n\n")
 
 # apply k-NN with k_best to the test set
 
-cat("[Training the kNN model (with the OPTIMIZED hyper-parameter k=",bestK,") on training set & applying the kNN to test set]\n", sep="")
+cat("[Training the kNN model (with the OPTIMIZED hyper-parameter k=",bestK,") on training set & applying the kNN to the test set]\n", sep="")
 prc_data_test_pred <- knn(train = prc_data_train, test = prc_data_test, cl = prc_data_train_labels, k=bestK)
 
 prc_data_test_labels_binary_TEMP <- replace(prc_data_test_labels, prc_data_test_labels=="M", 1)
@@ -140,7 +140,7 @@ pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curv
 print(pr_curve_test)
 
 mcc_outcome <- mcc(prc_data_test_labels_binary, prc_data_test_pred_binary)
-cat("The MCC value is ",mcc_outcome, " (worst possible: -1; best possible: +1)\n", sep="")
+cat("\nThe MCC value is ",mcc_outcome, " (worst possible: -1; best possible: +1)\n\n\n", sep="")
 
 
 

@@ -1,3 +1,6 @@
+#!/usr/bin/env Rscript
+
+
 setwd(".")
 options(stringsAsFactors = FALSE)
 library("clusterSim")
@@ -69,22 +72,24 @@ maxK <- 10 #NEW
 
 mcc_array <- character(length(maxK))
 
+
 # NEW PART:
 
 cat("\n[Optimization of the hyper-parameter k start]\n")
 # optimizaion loop
-for(thisK in 1:1)
+for(thisK in 1:10)
 {
   # apply k-NN with the current K value
   # train on the training set, evaluate in the validation set by computing the MCC
   # save the MCC corresponding to the current K value
   
-  cat("[Training the linear regression model (with C=",thisK,") on training set & applying the linear regression model to validation set]\n", sep="")
+  cat("[Training the linear regression model (with C=",thisK,") on training set & applying the linear regression model to the validation set]\n", sep="")
   
   # prc_data_validation_pred <- knn(train = prc_data_train, test = prc_data_validation, cl = prc_data_train_labels, k=thisK)
   # svm_model <- svm(Biopsy ~ ., cost=thisK, data=prc_data_train, method = "C-classification", kernel = "linear")
-  lin_reg_model <- lm(Biopsy ~ ., data=prc_data_train)
-    
+  lin_reg_model <- lm(prc_data_train_labels ~ ., data=prc_data_train)
+  
+   
   prc_data_validation_pred <- predict(lin_reg_model, prc_data_validation)
   
   # CrossTable(x=prc_data_validation_labels, y=prc_data_validation_pred, prop.chisq=FALSE)
@@ -131,7 +136,7 @@ cat("[Training the linear regression model (with the OPTIMIZED hyper-parameter C
 #prc_data_test_pred <- knn(train = prc_data_train, test = prc_data_test, cl = prc_data_train_labels, k=bestK)
 
 # svm_model_new <- svm(Biopsy ~ ., cost=bestK, data=prc_data_train, method = "C-classification", kernel = "linear")
-lin_reg_model_new <- lm(Biopsy ~ ., data=prc_data_train)
+lin_reg_model_new <- lm(prc_data_train_labels ~ ., data=prc_data_train)
 prc_data_test_pred <- predict(lin_reg_model_new, prc_data_test)
 
 prc_data_test_labels_binary_TEMP <- replace(prc_data_test_labels, prc_data_test_labels=="M", 1)
@@ -148,17 +153,19 @@ prc_data_test_pred_binary[prc_data_test_pred_binary>=tau]<-1
 prc_data_test_pred_binary[prc_data_test_pred_binary<tau]<-0
 # prc_data_test_pred_binary
 
-fg_test <- prc_data_test_pred[prc_data_test$Biopsy==1]
-bg_test <- prc_data_test_pred[prc_data_test$Biopsy==0]
-pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = F)
-plot(pr_curve_test)
-print(pr_curve_test)
+# head(prc_data_test)
+
+# fg_test <- prc_data_test_pred[prc_data_test$Biopsy==1]
+# bg_test <- prc_data_test_pred[prc_data_test$Biopsy==0]
+# pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = F)
+# plot(pr_curve_test)
+# print(pr_curve_test)
 
 
   
 
 mcc_outcome <- mcc(prc_data_test_labels_binary, prc_data_test_pred_binary)
-cat("\nThe MCC value is ",mcc_outcome, " (worst possible: -1; best possible: +1)\n", sep="")
+cat("\nThe MCC value is ",mcc_outcome, " (worst possible: -1; best possible: +1)\n\n\n", sep="")
 
 
 

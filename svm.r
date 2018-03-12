@@ -85,7 +85,7 @@ for(thisC in c_array)
   
   cat("[Training the SVM model (with C=",thisC,") on training set & applying the SVM model to validation set]\n", sep="")
   
-  svm_model <- svm(Biopsy ~ ., cost=thisC, data=prc_data_train, method = "C-classification", kernel = "linear")
+  svm_model <- svm(prc_data_train_labels ~ ., cost=thisC, data=prc_data_train, method = "C-classification", kernel = "linear")
     
   prc_data_validation_pred <- predict(svm_model, prc_data_validation)
   
@@ -105,11 +105,11 @@ for(thisC in c_array)
   prc_data_validation_pred_binary[prc_data_validation_pred_binary<tau]<-0
   
   # prc_data_validation_pred_binary
-  
-  fg <- prc_data_validation_pred[prc_data_validation$Biopsy==1]
-  bg <- prc_data_validation_pred[prc_data_validation$Biopsy==0]
-  pr_curve <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = F)
-  print(pr_curve)
+#   
+#   fg <- prc_data_validation_pred[prc_data_validation$Biopsy==1]
+#   bg <- prc_data_validation_pred[prc_data_validation$Biopsy==0]
+#   pr_curve <- pr.curve(scores.class0 = fg, scores.class1 = bg, curve = F)
+#   print(pr_curve)
   
   mcc_outcome <- mcc(prc_data_validation_labels_binary, prc_data_validation_pred_binary)
   cat("When C=",thisC,", the MCC value is ",mcc_outcome, "\t (worst possible: -1; best possible: +1)\n", sep="")
@@ -128,10 +128,10 @@ cat("[Optimization end]\n\n")
 
 # apply k-NN with k_best to the test set
 
-cat("[Training the SVM model (with the OPTIMIZED hyper-parameter C=",c_array[bestCindex],") on training set & applying the SVM to test set]\n", sep="")
+cat("[Training the SVM model (with the OPTIMIZED hyper-parameter C=",c_array[bestCindex],") on training set & applying the SVM to the test set]\n", sep="")
 #prc_data_test_pred <- knn(train = prc_data_train, test = prc_data_test, cl = prc_data_train_labels, k=bestK)
 
-svm_model_new <- svm(Biopsy ~ ., cost=c_array[bestCindex], data=prc_data_train, method = "C-classification", kernel = "linear")
+svm_model_new <- svm(prc_data_train_labels ~ ., cost=c_array[bestCindex], data=prc_data_train, method = "C-classification", kernel = "linear")
 prc_data_test_pred <- predict(svm_model_new, prc_data_test)
 
 prc_data_test_labels_binary_TEMP <- replace(prc_data_test_labels, prc_data_test_labels=="M", 1)
@@ -147,16 +147,16 @@ prc_data_test_pred_binary <- as.numeric (prc_data_test_pred_binary)
 prc_data_test_pred_binary[prc_data_test_pred_binary>=tau]<-1
 prc_data_test_pred_binary[prc_data_test_pred_binary<tau]<-0
 # prc_data_test_pred_binary
-
-fg_test <- prc_data_test_pred[prc_data_test$Biopsy==1]
-bg_test <- prc_data_test_pred[prc_data_test$Biopsy==0]
-pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = F)
-plot(pr_curve_test)
-
-print(pr_curve_test)
+# 
+# fg_test <- prc_data_test_pred[prc_data_test$Biopsy==1]
+# bg_test <- prc_data_test_pred[prc_data_test$Biopsy==0]
+# pr_curve_test <- pr.curve(scores.class0 = fg_test, scores.class1 = bg_test, curve = F)
+# plot(pr_curve_test)
+# 
+# print(pr_curve_test)
 
 mcc_outcome <- mcc(prc_data_test_labels_binary, prc_data_test_pred_binary)
-cat("The MCC value is ",mcc_outcome, " (worst possible: -1; best possible: +1)\n", sep="")
+cat("\nThe MCC value is ",mcc_outcome, " (worst possible: -1; best possible: +1)\n\n\n", sep="")
 
 
 
